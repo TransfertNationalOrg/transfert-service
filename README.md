@@ -19,10 +19,10 @@ About our application API
 
 #II. Développements
 1. Mettre en place l'API en suivant les étapes
-1.1. les modèles avec cardinalité
-1.2. les repositories
-1.3. les services pour couvrir les exigences fonctionnelles
-2. Partie utilisateur
+1 .1. les modèles avec cardinalité
+1 .2. les repositories
+1 .3. les services pour couvrir les exigences fonctionnelles
+2 . Partie utilisateur
 2.1. utiliser un framework ou une librairie
 2.1.1. console Agent
 2.1.2. back office
