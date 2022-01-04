@@ -28,9 +28,3 @@ About our application API
 2.1.1. console Agent
 2.1.2. back office
 3. Partie mobile : utilisation de Android Studio
-
-#Les différents repositories:
-1. transfert-api
-2. transfert-console-agent
-3. transfert-back-office
-4. transfert-wallet
