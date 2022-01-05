@@ -15,7 +15,7 @@ public class Transfert {
 
     private Long ref;
     private double commission;
-    private Etat etat;
+    private ETAT etat;
     private boolean notification;//Si on l'émetteur souhaite recevoir un accusé de réception
     @ManyToOne
     @JoinColumn(name = "beneficiaire_ID")
@@ -26,8 +26,8 @@ public class Transfert {
     @ManyToOne
     @JoinColumn(name = "agent_id")
     private Agent agent;
-    private Emission emission;
-    private Reception reception;
+    private MODE emission;
+    private MODE reception;
     private String motif;
 
 
