@@ -1,6 +1,6 @@
 package ma.ensa.model;
 
-public enum Emission {
+public enum MODE {
     GAB_BOA,
     AGENCE,
 }
