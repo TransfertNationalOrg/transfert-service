@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-01-05T19:19:35.470Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="bU58I2MilytjfC5qRx3A" version="16.2.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-01-05T19:20:18.991Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="iOWVgneXIASP52PwO4nY" version="16.2.2" type="github">
   <diagram id="8DBcMpiF3WPcPkWtYWcN" name="Page-1">
-    <mxGraphModel dx="1095" dy="513" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1295" dy="513" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -109,7 +109,7 @@
         <mxCell id="Eo5x3lgqGzYSnr3rYMwt-28" value="ClientProspect" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
           <mxGeometry x="290" y="585" width="140" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="Eo5x3lgqGzYSnr3rYMwt-32" value="Clent" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+        <mxCell id="Eo5x3lgqGzYSnr3rYMwt-32" value="Client" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
           <mxGeometry x="300" y="770" width="140" height="60" as="geometry" />
         </mxCell>
         <mxCell id="Eo5x3lgqGzYSnr3rYMwt-36" value="Paramètre" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
