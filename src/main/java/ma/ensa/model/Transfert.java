@@ -1,6 +1,8 @@
 package ma.ensa.model;
 
 import lombok.Data;
+import ma.ensa.model.enumer.ETAT;
+import ma.ensa.model.enumer.MODE;
 import ma.ensa.model.personne.Agent;
 import ma.ensa.model.personne.Personne;
 
@@ -29,9 +31,6 @@ public class Transfert {
     private MODE emission;
     private MODE reception;
     private String motif;
-
-
-
 
 
 }

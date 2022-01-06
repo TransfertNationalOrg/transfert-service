@@ -1,6 +1,9 @@
 package ma.ensa.model.personne;
 
 import lombok.Data;
+import ma.ensa.model.enumer.IDENTITE;
+import ma.ensa.model.enumer.PAYS;
+import ma.ensa.model.enumer.TITRE;
 
 import javax.persistence.*;
 import java.util.Date;

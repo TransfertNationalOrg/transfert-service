@@ -1,4 +1,4 @@
-package ma.ensa.model.personne;
+package ma.ensa.model.enumer;
 
 public enum TITRE {
     MONSIEUR,
