@@ -1,6 +1,7 @@
-package ma.ensa.model;
+package ma.ensa.model.notification;
 
 import lombok.Data;
+import ma.ensa.model.Transfert;
 
 import javax.persistence.*;
 

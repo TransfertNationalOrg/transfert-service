@@ -1,4 +1,4 @@
-package ma.ensa.model;
+package ma.ensa.model.notification;
 
 import lombok.Data;
 
