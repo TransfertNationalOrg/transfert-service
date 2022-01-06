@@ -6,6 +6,6 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class NotificationBOA extends NotificationAgenceWallet {
+public class NotificationGAB extends NotificationAgenceWallet {
         private int PIN;
 }
