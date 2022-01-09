@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-01-09T22:04:58.836Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="010yrNJK2hLp3r5rJYCr" version="16.2.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-01-09T22:12:56.270Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="f1izBLrJL-uvzh7_FK2X" version="16.2.2" type="github">
   <diagram id="8DBcMpiF3WPcPkWtYWcN" name="Page-1">
     <mxGraphModel dx="978" dy="484" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -192,9 +192,6 @@
         </mxCell>
         <mxCell id="Eo5x3lgqGzYSnr3rYMwt-100" value="&lt;b&gt;*&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="440" y="785" width="60" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="QcBr1MTC2CK02fu_J3rO-1" value="µService Back-office" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" parent="1" vertex="1">
-          <mxGeometry x="80" y="520" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="ED1YyseDA5ToxZGcXCbZ-1" value="Notification" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
           <mxGeometry x="680" y="10" width="140" height="60" as="geometry" />
