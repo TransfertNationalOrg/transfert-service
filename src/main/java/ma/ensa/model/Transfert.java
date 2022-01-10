@@ -1,6 +1,9 @@
 package ma.ensa.model;
 
 import lombok.Data;
+import ma.ensa.agent.AgentDTO;
+import ma.ensa.beneficiaire.BeneficiaireDTO;
+import ma.ensa.client.ClientDTO;
 
 import javax.persistence.*;
 
@@ -14,6 +17,9 @@ public class Transfert {
     private Long ref;
     private double commission;
     private String motif;
+    private AgentDTO agent;
+    private ClientDTO clientt;
+    private BeneficiaireDTO beneficiaire;
 
 
 }
