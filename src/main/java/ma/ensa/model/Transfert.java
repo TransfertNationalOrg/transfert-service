@@ -13,7 +13,6 @@ public class Transfert {
 
     private Long ref;
     private double commission;
-    private boolean notification;//Si on l'émetteur souhaite recevoir un accusé de réception
     private String motif;
 
 
