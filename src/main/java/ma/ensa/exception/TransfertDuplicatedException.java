@@ -9,5 +9,5 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class TransfertDuplicatedException extends Exception{
 
-    private Long tid;
+    private Long id;
 }
