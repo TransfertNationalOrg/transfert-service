@@ -6,6 +6,7 @@ import ma.ensa.exception.TransfertNotFoundException;
 import ma.ensa.model.Transfert;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,4 +47,20 @@ public class TransfertImpl implements TransfertService {
     public List<Transfert> findAll() {
         return transfertRepository.findAll();
     }
+
+    @Override
+    public List<Transfert> findAllByClientId(Long clientId) {
+        return transfertRepository.findByClientId(clientId);
+    }
+
+    @Override
+    public List<Transfert> findAllByAgentId(Long agentId) {
+        return transfertRepository.findByAgentId(agentId);
+    }
+
+    @Override
+    public List<Transfert> findAllByBeneficiaireId(Long beneficiaireId) {
+        return transfertRepository.findByBeneficiaireId(beneficiaireId);
+    }
+
 }

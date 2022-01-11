@@ -3,6 +3,8 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.converter.TransfertConverter;
 import ma.ensa.dto.TransfertDTO;
+import ma.ensa.model.Transfert;
+import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 public class TransfertController {
 
     final TransfertService transfertService;
+    final TransfertRepository transfertRepository;
     final TransfertConverter transfertConverter;
 
     @PostMapping("/")
@@ -45,6 +48,16 @@ public class TransfertController {
     @GetMapping("/")
     public ResponseEntity<List<TransfertDTO>> findAll() {
         return ResponseEntity.ok().body(transfertConverter.convertToDTOs(transfertService.findAll()));
+    }
+
+    @GetMapping("/transfert/{idClient}")
+    List<Transfert> getTransfertsByClient(@PathVariable("idClient") Long idClient){
+        return transfertService.findAllByClientId(idClient);
+    }
+
+    @GetMapping("/transfert/{idAgent}")
+    List<Transfert> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
+        return transfertService.findAllByClientId(idAgent);
     }
 
 

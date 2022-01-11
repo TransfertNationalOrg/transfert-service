@@ -12,4 +12,7 @@ public interface TransfertService {
     Transfert update(Transfert transfert) throws TransfertNotFoundException;//on ne peut pas modifier un transfert; seulement l'extourner pour resaisir un autre
     Long delete(Long ref) throws TransfertNotFoundException;
     List<Transfert> findAll();
+    List<Transfert> findAllByClientId(Long clientId);
+    List<Transfert> findAllByAgentId(Long clientId);
+    List<Transfert> findAllByBeneficiaireId(Long beneficiaireId);
 }
