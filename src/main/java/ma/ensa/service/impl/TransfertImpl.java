@@ -6,7 +6,6 @@ import ma.ensa.exception.TransfertNotFoundException;
 import ma.ensa.model.Transfert;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

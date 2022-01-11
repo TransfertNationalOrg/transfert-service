@@ -64,11 +64,4 @@ public class TransfertController {
     List<Transfert> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
         return transfertService.findAllByBeneficiaireId(idBeneficiaire);
     }
-
-    @GetMapping("/transfert/{idClientBanque}")
-    List<Transfert> getTransfertsByClientBanque(@PathVariable("idClient") Long idClient){
-        return transfertService.findAllByClientBanqueId(idClient);
-    }
-
-
 }
