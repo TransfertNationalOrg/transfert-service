@@ -15,4 +15,5 @@ public interface TransfertService {
     List<Transfert> findAllByClientId(Long clientId);
     List<Transfert> findAllByAgentId(Long clientId);
     List<Transfert> findAllByBeneficiaireId(Long beneficiaireId);
+    List<Transfert> findAllByClientBanqueId(Long clientId);
 }

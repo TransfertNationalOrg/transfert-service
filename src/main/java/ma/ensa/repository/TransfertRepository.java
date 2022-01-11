@@ -19,4 +19,7 @@ public interface TransfertRepository extends JpaRepository<Transfert, Long> {
 
     @Query("SELECT t from Transfert t where c.getIdBeneficiaire=:x")
     List<Transfert> findByBeneficiaireId(@Param("x") Long beneficiaireId);
+
+    @Query("SELECT t from Transfert t where c.getIdClient=:x")
+    List<Transfert> findByClientBanqueId(@Param("x") Long clientId);
 }

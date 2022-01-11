@@ -63,4 +63,9 @@ public class TransfertImpl implements TransfertService {
         return transfertRepository.findByBeneficiaireId(beneficiaireId);
     }
 
+    @Override
+    public List<Transfert> findAllByClientBanqueId(Long clientId) {
+        return transfertRepository.findByClientBanqueId(clientId);
+    }
+
 }
