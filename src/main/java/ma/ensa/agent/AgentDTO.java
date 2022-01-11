@@ -1,5 +1,6 @@
 package ma.ensa.agent;
 
+import lombok.Data;
 import ma.ensa.agent.enumer.IDENTITE;
 import ma.ensa.agent.enumer.PAYS;
 import ma.ensa.agent.enumer.ROLE;
@@ -7,6 +8,7 @@ import ma.ensa.agent.enumer.TITRE;
 
 import java.util.Date;
 
+@Data
 public class AgentDTO {
     protected Long id;
     protected TITRE titre;
