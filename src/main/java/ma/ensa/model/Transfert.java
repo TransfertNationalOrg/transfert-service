@@ -12,14 +12,14 @@ import javax.persistence.*;
 public class Transfert {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    protected Long id;
 
-    private Long ref;
-    private double commission;
-    private String motif;
-    private AgentDTO agent;
-    private ClientDTO clientt;
-    private BeneficiaireDTO beneficiaire;
+    protected Long ref;
+    protected double commission;
+    protected String motif;
+    protected AgentDTO agent;
+    protected ClientDTO clientt;
+    protected BeneficiaireDTO beneficiaire;
 
 
 }

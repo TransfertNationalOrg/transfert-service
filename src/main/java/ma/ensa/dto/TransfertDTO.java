@@ -1,13 +1,13 @@
 package ma.ensa.dto;
 
 public class TransfertDTO {
-    private Long id;
-    private double montant;
-    private Long ref;
-    private double commission;
-    private String motif;
-    private Long agentId;
-    private Long clientId;
-    private Long beneficiareId;
+    protected Long id;
+    protected double montant;
+    protected Long ref;
+    protected double commission;
+    protected String motif;
+    protected Long agentId;
+    protected Long clientId;
+    protected Long beneficiareId;
 
 }
