@@ -17,9 +17,9 @@ import java.util.List;
 @Data
 public class TransfertController {
 
-    final TransfertService transfertService;
-    final TransfertRepository transfertRepository;
-    final TransfertConverter transfertConverter;
+    private final TransfertService transfertService;
+    private final TransfertRepository transfertRepository;
+    private final TransfertConverter transfertConverter;
 
     @PostMapping("/")
     public ResponseEntity<?> save(@RequestBody TransfertDTO transfertDTO) throws Exception {
