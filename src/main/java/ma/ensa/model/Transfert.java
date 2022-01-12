@@ -15,7 +15,7 @@ public class Transfert {
     protected double commission;
     protected String motif;
     protected Long idAgent;
-    protected Long idClientt;
+    protected Long idClient;
     protected Long idBeneficiaire;
 
 
