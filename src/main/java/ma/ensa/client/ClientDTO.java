@@ -28,6 +28,4 @@ public class ClientDTO {
     protected Long gsm;
     protected String email;
 
-
-    protected Set<Long> transfertsIds;
 }
