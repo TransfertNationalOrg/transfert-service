@@ -12,6 +12,7 @@ public class Transfert {
     protected Long id;
 
     protected Long ref;
+    protected double montant;
     protected double commission;
     protected String motif;
     protected Long idAgent;
