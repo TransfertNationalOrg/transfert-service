@@ -3,7 +3,6 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.converter.TransfertConverter;
 import ma.ensa.dto.TransfertDTO;
-import ma.ensa.model.Transfert;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
 import org.springframework.http.HttpStatus;
@@ -45,23 +44,30 @@ public class TransfertController {
         return ResponseEntity.ok().body("Transfert [" + transfertService.delete(id) + "] deleted successfully.");
     }
 
+    //Get Transfert by id
+    @GetMapping("/{id}")
+    public TransfertDTO getTransfertById(@PathVariable("id") Long id){
+        return transfertConverter.convertToDTO(transfertRepository.getById(id));
+    }
+
+
     @GetMapping("/")
     public ResponseEntity<List<TransfertDTO>> findAll() {
         return ResponseEntity.ok().body(transfertConverter.convertToDTOs(transfertService.findAll()));
     }
 
-    @GetMapping("/transfert/{idClient}")
-    List<Transfert> getTransfertsByClient(@PathVariable("idClient") Long idClient){
-        return transfertService.findAllByClientId(idClient);
+    @GetMapping("/client/{idClient}")
+    List<TransfertDTO> getTransfertsByClient(@PathVariable("idClient") Long idClient){
+        return transfertConverter.convertToDTOs(transfertService.findAllByClientId(idClient));
     }
 
-    @GetMapping("/transfert/{idAgent}")
-    List<Transfert> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
-        return transfertService.findAllByClientId(idAgent);
+    @GetMapping("/agent/{idAgent}")
+    List<TransfertDTO> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
+        return transfertConverter.convertToDTOs(transfertRepository.findByAgentId(idAgent));
     }
 
-    @GetMapping("/transfert/{idBeneficiaire}")
-    List<Transfert> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
-        return transfertService.findAllByBeneficiaireId(idBeneficiaire);
+    @GetMapping("/beneficiaire/{idBeneficiaire}")
+    List<TransfertDTO> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
+        return transfertConverter.convertToDTOs(transfertService.findAllByBeneficiaireId(idBeneficiaire));
     }
 }
