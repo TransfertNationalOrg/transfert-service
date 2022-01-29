@@ -11,13 +11,14 @@ public class Transfert {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected Long id;
 
-    protected Long ref;
+    protected String ref;
     protected double montant;
     protected double commission;
     protected String motif;
     protected Long idAgent;
     protected Long idClient;
     protected Long idBeneficiaire;
+    protected Etat etat = Etat.A_SERVIR;
 
 
 }

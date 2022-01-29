@@ -6,7 +6,7 @@ import lombok.Data;
 public class TransfertDTO {
     protected Long id;
     protected double montant;
-    protected Long ref;
+    protected String ref;
     protected double commission;
     protected String motif;
     protected Long idAgent;
