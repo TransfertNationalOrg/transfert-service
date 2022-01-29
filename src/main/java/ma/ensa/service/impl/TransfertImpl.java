@@ -21,6 +21,11 @@ public class TransfertImpl implements TransfertService {
         Transfert transfertFromDB = transfertRepository.findById(transfert.getId()).orElse(null);
         if (transfertFromDB != null)
             throw new TransfertDuplicatedException(transfert.getId());
+        Long id = transfertRepository.save(transfert).getId();
+
+        //Manage the reference by updating
+        String ref = "EDP837" + generateRef(id);
+        transfert.setRef(ref);
         return transfertRepository.save(transfert);
     }
 
@@ -65,6 +70,10 @@ public class TransfertImpl implements TransfertService {
     @Override
     public List<Transfert> findAllByClientBanqueId(Long clientId) {
         return transfertRepository.findByClientBanqueId(clientId);
+    }
+
+    private String generateRef (Long id){
+        return String.format("%013d",id+1);
     }
 
 }
