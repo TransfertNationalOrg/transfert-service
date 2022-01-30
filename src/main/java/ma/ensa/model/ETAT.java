@@ -1,6 +1,6 @@
 package ma.ensa.model;
 
-public enum Etat {
+public enum ETAT {
     A_SERVIR,
     SERVI,
     EXTOURNE,
