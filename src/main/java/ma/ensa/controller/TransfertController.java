@@ -1,6 +1,8 @@
 package ma.ensa.controller;
 
 import lombok.Data;
+import ma.ensa.agent.AgentDTO;
+import ma.ensa.agent.AgentFeign;
 import ma.ensa.converter.TransfertConverter;
 import ma.ensa.dto.TransfertDTO;
 import ma.ensa.model.ETAT;
@@ -22,6 +24,10 @@ public class TransfertController {
     private final TransfertRepository transfertRepository;
     private final TransfertConverter transfertConverter;
 
+    private final AgentFeign agentFeign;
+
+    //CRUD
+
     @PostMapping("/")
     public ResponseEntity<?> save(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
@@ -37,6 +43,40 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfertConverter.convertToDM(transfertDTO))));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
+        if(id == null)
+            return ResponseEntity.badRequest().body("The provided transfert's id is not valid");
+        return ResponseEntity.ok().body("Transfert [" + transfertService.delete(id) + "] deleted successfully.");
+    }
+
+    //Get Transfert by id
+    @GetMapping("/{id}")
+    public TransfertDTO getTransfertById(@PathVariable("id") Long id){
+        return transfertConverter.convertToDTO(transfertRepository.getById(id));
+    }
+
+
+    @GetMapping("/")
+    public ResponseEntity<List<TransfertDTO>> findAll() {
+        return ResponseEntity.ok().body(transfertConverter.convertToDTOs(transfertService.findAll()));
+    }
+
+    @GetMapping("/client/{idClient}")
+    List<TransfertDTO> getTransfertsByClient(@PathVariable("idClient") Long idClient){
+        return transfertConverter.convertToDTOs(transfertService.findAllByClientId(idClient));
+    }
+
+    @GetMapping("/agent/{idAgent}")
+    List<TransfertDTO> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
+        return transfertConverter.convertToDTOs(transfertRepository.findByAgentId(idAgent));
+    }
+
+    @GetMapping("/beneficiaire/{idBeneficiaire}")
+    List<TransfertDTO> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
+        return transfertConverter.convertToDTOs(transfertService.findAllByBeneficiaireId(idBeneficiaire));
     }
 
     //Bloquer un transfert
@@ -88,45 +128,15 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("The provided id is not valid");
         Transfert transfert = transfertRepository.getById(id);
         //On ne peut extourner un transfert que s'il est dans les etats : A_SERVIR, BLOQUE, DEBLOQUE_A_SERVIR
-        if (transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.BLOQUE) || transfert.equals(ETAT.DEBLOQUE_A_SERVIR))
+        if (!(transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.BLOQUE) || transfert.equals(ETAT.DEBLOQUE_A_SERVIR)))
             return ResponseEntity.badRequest().body("This operation is not permitted");
         transfert.setEtat(ETAT.EXTOURNE);
+        //On met à jour le solde de l'agent
+        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdAgent());
+        agentDTO.setSolde(agentDTO.getSolde()-transfert.getMontant());
+        agentFeign.update(agentDTO);
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
-        if(id == null)
-            return ResponseEntity.badRequest().body("The provided transfert's id is not valid");
-        return ResponseEntity.ok().body("Transfert [" + transfertService.delete(id) + "] deleted successfully.");
-    }
-
-    //Get Transfert by id
-    @GetMapping("/{id}")
-    public TransfertDTO getTransfertById(@PathVariable("id") Long id){
-        return transfertConverter.convertToDTO(transfertRepository.getById(id));
-    }
-
-
-    @GetMapping("/")
-    public ResponseEntity<List<TransfertDTO>> findAll() {
-        return ResponseEntity.ok().body(transfertConverter.convertToDTOs(transfertService.findAll()));
-    }
-
-    @GetMapping("/client/{idClient}")
-    List<TransfertDTO> getTransfertsByClient(@PathVariable("idClient") Long idClient){
-        return transfertConverter.convertToDTOs(transfertService.findAllByClientId(idClient));
-    }
-
-    @GetMapping("/agent/{idAgent}")
-    List<TransfertDTO> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
-        return transfertConverter.convertToDTOs(transfertRepository.findByAgentId(idAgent));
-    }
-
-    @GetMapping("/beneficiaire/{idBeneficiaire}")
-    List<TransfertDTO> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
-        return transfertConverter.convertToDTOs(transfertService.findAllByBeneficiaireId(idBeneficiaire));
     }
 
 

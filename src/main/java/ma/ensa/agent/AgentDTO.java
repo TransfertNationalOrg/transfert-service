@@ -28,4 +28,5 @@ public class AgentDTO {
     protected String email;
     protected String matricule;
     protected ROLE role;
+    protected double solde;
 }
