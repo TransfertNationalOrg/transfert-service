@@ -53,6 +53,34 @@ public class TransfertController {
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
     }
 
+    //Débloquer un transfert
+    @PutMapping("/debloquer/{id}")
+    public ResponseEntity<?> debloquer(@PathVariable Long id) throws Exception {
+        if (id == null || transfertRepository.getById(id) == null)
+            return ResponseEntity.badRequest().body("The provided is not valid");
+        Transfert transfert = transfertRepository.getById(id);
+        //On ne peut débloquer un transfert que s'il est à l'état BLOQUE
+        if (!transfert.getEtat().equals(ETAT.BLOQUE))
+            return ResponseEntity.badRequest().body("This operation is not permitted");
+        transfert.setEtat(ETAT.A_SERVIR);
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
+    }
+
+    //Restituer un transfert
+    @PutMapping("/restituer/{id}")
+    public ResponseEntity<?> restituer(@PathVariable Long id) throws Exception {
+        if (id == null || transfertRepository.getById(id) == null)
+            return ResponseEntity.badRequest().body("The provided is not valid");
+        Transfert transfert = transfertRepository.getById(id);
+        //On ne peut restituer un transfert que dans les Etats A_SERVIR & DEBLOQUE_A_SERVIR
+        if (!(transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.DEBLOQUE_A_SERVIR)))
+            return ResponseEntity.badRequest().body("This operation is not permitted");
+        transfert.setEtat(ETAT.RESTITUE);
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) throws Exception {
         if(id == null)
