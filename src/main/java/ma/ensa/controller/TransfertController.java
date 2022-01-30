@@ -3,6 +3,8 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.converter.TransfertConverter;
 import ma.ensa.dto.TransfertDTO;
+import ma.ensa.model.ETAT;
+import ma.ensa.model.Transfert;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,20 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfertConverter.convertToDM(transfertDTO))));
+    }
+
+    //Bloquer un transfert
+    @PutMapping("/bloquer/{id}")
+    public ResponseEntity<?> bloquer(@PathVariable Long id) throws Exception {
+        if (id == null || transfertRepository.getById(id) == null)
+            return ResponseEntity.badRequest().body("The provided id is not valid");
+        Transfert transfert = transfertRepository.getById(id);
+        //On peut bloquer un transfert que s'il est à l'état A_SERVIR
+        if (!transfert.getEtat().equals(ETAT.A_SERVIR))
+            return ResponseEntity.badRequest().body("This operation is not permitted");
+        transfert.setEtat(ETAT.BLOQUE);
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
     }
 
     @DeleteMapping("/{id}")
@@ -70,4 +86,6 @@ public class TransfertController {
     List<TransfertDTO> getTransfertsByBeneficiaire(@PathVariable("idBeneficiaire") Long idBeneficiaire){
         return transfertConverter.convertToDTOs(transfertService.findAllByBeneficiaireId(idBeneficiaire));
     }
+
+
 }
