@@ -18,7 +18,5 @@ public class Transfert {
     protected Long idAgent;
     protected Long idClient;
     protected Long idBeneficiaire;
-    protected Etat etat = Etat.A_SERVIR;
-
-
+    protected ETAT etat = ETAT.A_SERVIR;
 }
