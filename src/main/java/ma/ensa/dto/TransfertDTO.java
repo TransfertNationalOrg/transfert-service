@@ -1,7 +1,7 @@
 package ma.ensa.dto;
 
 import lombok.Data;
-import ma.ensa.model.ETAT;
+import ma.ensa.model.enumer.ETAT;
 
 @Data
 public class TransfertDTO {
@@ -10,9 +10,10 @@ public class TransfertDTO {
     protected String ref;
     protected double commission;
     protected String motif;
-    protected Long idAgent;
+    protected Long idEmetteur;
     protected Long idClient;
     protected Long idBeneficiaire;
     protected ETAT etat = ETAT.A_SERVIR;
-
+    protected Long idEmetteurServ;
+    protected int PIN;
 }
