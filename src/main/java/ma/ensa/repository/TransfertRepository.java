@@ -14,7 +14,7 @@ public interface TransfertRepository extends JpaRepository<Transfert, Long> {
     @Query("SELECT transfert from Transfert transfert where transfert.idClient=:x")
     List<Transfert> findByClientId(@Param("x") Long clientId);
 
-    @Query("SELECT transfert from Transfert transfert where transfert.idAgent=:x")
+    @Query("SELECT transfert from Transfert transfert where transfert.idEmetteur=:x")
     List<Transfert> findByAgentId(@Param("x") Long agentId);
 
     @Query("SELECT transfert from Transfert transfert where transfert.idBeneficiaire=:x")
@@ -22,4 +22,7 @@ public interface TransfertRepository extends JpaRepository<Transfert, Long> {
 
     @Query("SELECT transfert from Transfert transfert where transfert.idClient=:x")
     List<Transfert> findByClientBanqueId(@Param("x") Long clientId);
+
+    @Query("SELECT transfert from Transfert transfert where transfert.ref=:x")
+    Transfert findByRef(@Param("x") String ref);
 }

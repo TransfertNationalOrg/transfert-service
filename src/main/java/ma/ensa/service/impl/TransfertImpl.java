@@ -72,6 +72,11 @@ public class TransfertImpl implements TransfertService {
         return transfertRepository.findByClientBanqueId(clientId);
     }
 
+    @Override
+    public Transfert findByRef(String ref) {
+        return transfertRepository.findByRef(ref);
+    }
+
     private String generateRef (Long id){
         return String.format("%013d",id+1);
     }
