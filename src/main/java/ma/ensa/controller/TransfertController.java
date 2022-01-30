@@ -71,12 +71,26 @@ public class TransfertController {
     @PutMapping("/restituer/{id}")
     public ResponseEntity<?> restituer(@PathVariable Long id) throws Exception {
         if (id == null || transfertRepository.getById(id) == null)
-            return ResponseEntity.badRequest().body("The provided is not valid");
+            return ResponseEntity.badRequest().body("The provided id is not valid");
         Transfert transfert = transfertRepository.getById(id);
         //On ne peut restituer un transfert que dans les Etats A_SERVIR & DEBLOQUE_A_SERVIR
         if (!(transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.DEBLOQUE_A_SERVIR)))
             return ResponseEntity.badRequest().body("This operation is not permitted");
         transfert.setEtat(ETAT.RESTITUE);
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
+    }
+
+    //Extourner un transfert
+    @PutMapping("/extourner/{id}")
+    public ResponseEntity<?> extourner(@PathVariable Long id) throws Exception {
+        if (id == null || transfertRepository.getById(id) == null)
+            return ResponseEntity.badRequest().body("The provided id is not valid");
+        Transfert transfert = transfertRepository.getById(id);
+        //On ne peut extourner un transfert que s'il est dans les etats : A_SERVIR, BLOQUE, DEBLOQUE_A_SERVIR
+        if (transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.BLOQUE) || transfert.equals(ETAT.DEBLOQUE_A_SERVIR))
+            return ResponseEntity.badRequest().body("This operation is not permitted");
+        transfert.setEtat(ETAT.EXTOURNE);
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
     }
