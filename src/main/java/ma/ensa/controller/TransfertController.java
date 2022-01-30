@@ -3,9 +3,12 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.agent.AgentDTO;
 import ma.ensa.agent.AgentFeign;
+import ma.ensa.client.ClientDTO;
+import ma.ensa.client.ClientFeign;
 import ma.ensa.converter.TransfertConverter;
 import ma.ensa.dto.TransfertDTO;
-import ma.ensa.model.ETAT;
+import ma.ensa.model.credentials.CredentialsGab;
+import ma.ensa.model.enumer.ETAT;
 import ma.ensa.model.Transfert;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
@@ -25,13 +28,38 @@ public class TransfertController {
     private final TransfertConverter transfertConverter;
 
     private final AgentFeign agentFeign;
+    private final ClientFeign clientFeign;
 
     //CRUD
-
-    @PostMapping("/")
+    //Ajouter un transfert via console-agent &back-office & wallet
+    @PostMapping("/agent")
     public ResponseEntity<?> save(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
+        //--> Id de l'agent courant à idEmetteur
+        //On met à jour le solde
+        //-->mettre à jour l'idAgentServ par l'id de l'agent courant
+        //On met à jour le solde de l'agent
+        AgentDTO agentDTO = agentFeign.getAgentById(transfertDTO.getIdEmetteur());
+        agentDTO.setSolde(agentDTO.getSolde()+transfertDTO.getMontant());
+        agentFeign.update(agentDTO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
+    }
+
+    //Ajouter un transfert via wallet
+    @PostMapping("/wallet")
+    public ResponseEntity<?> savefromWallet(@RequestBody TransfertDTO transfertDTO) throws Exception {
+        if (transfertDTO == null)
+            return ResponseEntity.badRequest().body("The provided transfert is not valid");
+        //--> Id de l'agent courant à idEmetteur
+        //On met à jour le solde
+        //-->mettre à jour l'idAgentServ par l'id de l'agent courant
+        //On met à jour le solde du client
+        ClientDTO clientDTO = clientFeign.getClientById(transfertDTO.getIdEmetteur());
+        clientDTO.setSolde(clientDTO.getSolde()-transfertDTO.getMontant());
+        clientFeign.update(clientDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
@@ -69,9 +97,9 @@ public class TransfertController {
         return transfertConverter.convertToDTOs(transfertService.findAllByClientId(idClient));
     }
 
-    @GetMapping("/agent/{idAgent}")
-    List<TransfertDTO> getTransfertsByAgent(@PathVariable("idAgent") Long idAgent){
-        return transfertConverter.convertToDTOs(transfertRepository.findByAgentId(idAgent));
+    @GetMapping("/agent/{idEmetteur}")
+    List<TransfertDTO> getTransfertsByAgent(@PathVariable("idEmetteur") Long idEmetteur){
+        return transfertConverter.convertToDTOs(transfertRepository.findByAgentId(idEmetteur));
     }
 
     @GetMapping("/beneficiaire/{idBeneficiaire}")
@@ -117,6 +145,11 @@ public class TransfertController {
         if (!(transfert.getEtat().equals(ETAT.A_SERVIR) || transfert.getEtat().equals(ETAT.DEBLOQUE_A_SERVIR)))
             return ResponseEntity.badRequest().body("This operation is not permitted");
         transfert.setEtat(ETAT.RESTITUE);
+        //On met à jour le solde de l'agent
+        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdEmetteur());
+        agentDTO.setSolde(agentDTO.getSolde()-transfert.getMontant());
+        agentFeign.update(agentDTO);
+        //Vérifier les conditions de remboursement de la commission
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
     }
@@ -132,9 +165,42 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("This operation is not permitted");
         transfert.setEtat(ETAT.EXTOURNE);
         //On met à jour le solde de l'agent
-        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdAgent());
+        //--> transfert.setIdEmetteur(IdCourant);
+        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdEmetteur());
         agentDTO.setSolde(agentDTO.getSolde()-transfert.getMontant());
         agentFeign.update(agentDTO);
+        //Vérifier les conditions de remboursement de la commission
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
+    }
+
+    //SERVIR UN TRANSFERT
+
+    //Sur le frontend, on fait une recherche par référence pour afficher le nom du bénéficiaire; après on clique sur payer pour appeler la
+    //méthode suivante
+    @PutMapping("/servir/agent")
+    public ResponseEntity<?> servir(@RequestBody String ref) throws Exception {
+        Transfert transfert = transfertService.findByRef(ref);
+        if (transfert == null)
+            return ResponseEntity.badRequest().body("The provided reference is not valid");
+        transfert.setEtat(ETAT.SERVI);
+        //-->mettre à jour l'idEmetteurServ par l'id de l'agent courant
+        //--> transfert.setIdEmetteur(IdCourant);
+        //On met à jour le solde de l'agent
+        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdEmetteur());
+        agentDTO.setSolde(agentDTO.getSolde()-transfert.getMontant());
+        agentFeign.update(agentDTO);
+        return ResponseEntity
+                .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
+    }
+
+    @PutMapping("/servir/gab")
+    public ResponseEntity<?> servir(@RequestBody CredentialsGab gab) throws Exception {
+        Transfert transfert = transfertService.findByRef(gab.getRef());
+        if (transfert == null)
+            return ResponseEntity.badRequest().body("The provided reference is not valid");
+        if (transfert.getPIN()!= gab.getPIN())
+            return ResponseEntity.badRequest().body("The provided PIN is not valid");
         return ResponseEntity
                 .ok().body(transfertConverter.convertToDTO(transfertService.update(transfert)));
     }
