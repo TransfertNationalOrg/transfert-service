@@ -4,6 +4,7 @@ import lombok.Data;
 import ma.ensa.exception.TransfertDuplicatedException;
 import ma.ensa.exception.TransfertNotFoundException;
 import ma.ensa.model.Transfert;
+import ma.ensa.model.enumer.ETAT;
 import ma.ensa.repository.TransfertRepository;
 import ma.ensa.service.TransfertService;
 import org.springframework.stereotype.Service;
@@ -81,4 +82,37 @@ public class TransfertImpl implements TransfertService {
         return String.format("%013d",id+1);
     }
 
+    public Boolean verifMontantClient(double montant) {
+
+        if(montant > 2000 ) {
+            return false;
+
+        }
+        else {
+            return true;
+        }
+    }
+
+    public Boolean verifMontantAgence(double montant) {
+
+        if(montant > 80000) {
+            return false;
+
+        }
+        else {
+            return true;
+        }
+    }
+
+    public ETAT getEtatTransfert(double montant, boolean otp) {
+        ETAT etat;
+
+        if(verifMontantClient(montant) == false || otp == false || verifMontantAgence(montant) == false ) {
+            etat = ETAT.EXTOURNE;
+        }
+        else {
+            etat= ETAT.A_SERVIR;
+        }
+        return etat;
+    }
 }
