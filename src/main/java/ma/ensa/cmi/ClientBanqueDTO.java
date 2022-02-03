@@ -26,5 +26,5 @@ public class ClientBanqueDTO {
     protected String ville;
     protected Long gsm;
     protected String email;
-    protected CompteBancaireDTO compteBancaireDTO;
+    protected Long idCompteBancaire;
 }

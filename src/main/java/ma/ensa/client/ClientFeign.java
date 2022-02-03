@@ -1,5 +1,6 @@
 package ma.ensa.client;
 
+import ma.ensa.dto.CurrentClientDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,11 @@ public interface ClientFeign {
     @GetMapping("client/{id}")
     ClientDTO getClientById(@PathVariable("id") Long id);
 
+    //Update an client
     @PutMapping("client/")
     ClientDTO update(@RequestBody ClientDTO clientDTO);
+
+    //Get current client
+    @GetMapping("/")
+    CurrentClientDTO getCurrentCllient();
 }

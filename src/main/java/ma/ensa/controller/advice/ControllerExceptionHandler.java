@@ -12,7 +12,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(TransfertNotFoundException.class)
     private ResponseEntity<?> handleNotFoundException(TransfertNotFoundException exception){
-        String responseMessage = "The provided movie ["+exception.getId()+"] is nowhere to be found.";
+        String responseMessage = "The provided transfert ["+exception.getId()+"] is nowhere to be found.";
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(responseMessage);
@@ -20,7 +20,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(TransfertDuplicatedException.class)
     private ResponseEntity<?> handleMovieDuplicatedException(TransfertDuplicatedException exception){
-        String responseMessage = "The provided movie ["+exception.getId()+"] is already existing.";
+        String responseMessage = "The provided transfert ["+exception.getId()+"] is already existing.";
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(responseMessage);

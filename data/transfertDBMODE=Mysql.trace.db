@@ -256,3 +256,35 @@ select transfert0_.id as id1_0_, transfert0_.commission as commissi2_0_, transfe
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
 	at java.lang.Thread.run(Thread.java:748)
+2022-01-29 12:31:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:32:34 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:36:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:37:52 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP837' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP837' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:40:45 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:42:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:43:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP837' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP837' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]
+2022-01-29 12:45:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLDataException: Erreur lors de la conversion de données "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"
+Data conversion error converting "'EDP8370' (TRANSFERT: ""REF"" BIGINT)"; SQL statement:
+insert into transfert (commission, etat, id_agent, id_beneficiaire, id_client, montant, motif, ref, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) [22018-200]

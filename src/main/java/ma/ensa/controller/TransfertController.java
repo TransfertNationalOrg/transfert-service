@@ -3,9 +3,17 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.agent.AgentDTO;
 import ma.ensa.agent.AgentFeign;
+import ma.ensa.beneficiaire.BeneficiaireDTO;
+import ma.ensa.beneficiaire.BeneficiaireFeign;
 import ma.ensa.client.ClientDTO;
 import ma.ensa.client.ClientFeign;
+import ma.ensa.cmi.ClientBanqueDTO;
+import ma.ensa.cmi.ClientBanqueFeign;
+import ma.ensa.cmi.CompteBancaireDTO;
+import ma.ensa.cmi.CompteBancaireFeign;
 import ma.ensa.converter.TransfertConverter;
+import ma.ensa.dto.CurrentAgentDTO;
+import ma.ensa.dto.CurrentClientDTO;
 import ma.ensa.dto.TransfertDTO;
 import ma.ensa.model.credentials.CredentialsGab;
 import ma.ensa.model.enumer.ETAT;
@@ -29,18 +37,23 @@ public class TransfertController {
 
     private final AgentFeign agentFeign;
     private final ClientFeign clientFeign;
+    private final ClientBanqueFeign clientBanqueFeign;
+    private final CompteBancaireFeign compteBancaireFeign;
+
 
     //CRUD
     //Ajouter un transfert via console-agent &back-office & wallet
-    @PostMapping("/agent")
+    //en espèces
+    @PostMapping("/agent/especes")
     public ResponseEntity<?> save(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
+        CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
         //--> Id de l'agent courant à idEmetteur
+        transfertDTO.setIdEmetteur(currentAgentDTO.getTheId());
         //On met à jour le solde
-        //-->mettre à jour l'idAgentServ par l'id de l'agent courant
+        AgentDTO agentDTO = agentFeign.getAgentById(currentAgentDTO.getTheId());
         //On met à jour le solde de l'agent
-        AgentDTO agentDTO = agentFeign.getAgentById(transfertDTO.getIdEmetteur());
         agentDTO.setSolde(agentDTO.getSolde()+transfertDTO.getMontant());
         agentFeign.update(agentDTO);
         return ResponseEntity
@@ -48,22 +61,46 @@ public class TransfertController {
                 .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
     }
 
-    //Ajouter un transfert via wallet
-    @PostMapping("/wallet")
-    public ResponseEntity<?> savefromWallet(@RequestBody TransfertDTO transfertDTO) throws Exception {
+    //Ajouter un transfert par débit compte bancaire
+    @PostMapping("/agent/cmi")
+    public ResponseEntity<?> saveViaCmi(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
+        //VERIFIER SI LE CLIENT DISPOSE ASSEZ DE SOLDE DANS SON COMPTE BANCAIRE POUR LE TRANSFERT
+        CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
         //--> Id de l'agent courant à idEmetteur
-        //On met à jour le solde
-        //-->mettre à jour l'idAgentServ par l'id de l'agent courant
-        //On met à jour le solde du client
-        ClientDTO clientDTO = clientFeign.getClientById(transfertDTO.getIdEmetteur());
-        clientDTO.setSolde(clientDTO.getSolde()-transfertDTO.getMontant());
-        clientFeign.update(clientDTO);
+        transfertDTO.setIdEmetteur(currentAgentDTO.getTheId());
+        //
+        ClientBanqueDTO clientBanqueDTO = clientBanqueFeign.getClientBanqueById(transfertDTO.getIdClient());
+        CompteBancaireDTO compteBancaireDTO = compteBancaireFeign.getCompteBancaireById(clientBanqueDTO.getIdCompteBancaire());
+        compteBancaireDTO.setSolde(compteBancaireDTO.getSolde()-transfertDTO.getMontant());
+        compteBancaireFeign.update(compteBancaireDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
     }
+
+    //Ajouter un transfert via wallet
+    @PostMapping("/wallet")
+    public ResponseEntity<?> saveFromWallet(@RequestBody TransfertDTO transfertDTO) throws Exception {
+        if (transfertDTO == null)
+            return ResponseEntity.badRequest().body("The provided transfert is not valid");
+        CurrentClientDTO currentClientDTO = clientFeign.getCurrentCllient();
+        //VERIFIER SI LE CLIENT DISPOSE ASSEZ DE SOLDE POUR LE TRANSFERT
+        transfertDTO.setIdEmetteur(currentClientDTO.getTheId());
+        //On met à jour le solde
+        ClientDTO clientDTO = clientFeign.getClientById(currentClientDTO.getTheId());
+        clientDTO.setSolde(clientDTO.getSolde()-transfertDTO.getMontant());
+        clientFeign.update(clientDTO);
+        //Bénéficiaire est client
+        ClientDTO clientBeneficiaireDTO = clientFeign.getClientById(transfertDTO.getIdBeneficiaire());
+        clientBeneficiaireDTO.setSolde(clientBeneficiaireDTO.getSolde()+transfertDTO.getMontant());
+        clientFeign.update(clientBeneficiaireDTO);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
+    }
+    //Gerer les commissions
 
     @PutMapping("/")
     public ResponseEntity<?> update(@RequestBody TransfertDTO transfertDTO) throws Exception {

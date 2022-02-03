@@ -1,5 +1,6 @@
 package ma.ensa.agent;
 
+import ma.ensa.dto.CurrentAgentDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,4 +22,9 @@ public interface AgentFeign {
     //Update an agent
     @PutMapping("agent/")
     AgentDTO update(@RequestBody AgentDTO agentDTO);
+
+    //Get current agent
+    @GetMapping("/")
+    CurrentAgentDTO getCurrentAgent();
+
 }
