@@ -250,9 +250,10 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("The provided reference is not valid");
         transfert.setEtat(ETAT.SERVI);
         //-->mettre à jour l'idEmetteurServ par l'id de l'agent courant
-        //--> transfert.setIdEmetteur(IdCourant);
+        CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
+        transfert.setIdEmetteurServ(currentAgentDTO.getTheId());
         //On met à jour le solde de l'agent
-        AgentDTO agentDTO = agentFeign.getAgentById(transfert.getIdEmetteur());
+        AgentDTO agentDTO = agentFeign.getAgentById(currentAgentDTO.getTheId());
         agentDTO.setSolde(agentDTO.getSolde()-transfert.getMontant());
         agentFeign.update(agentDTO);
         return ResponseEntity
