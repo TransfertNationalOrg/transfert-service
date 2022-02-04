@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("transfert")
 @Data
@@ -50,7 +51,7 @@ public class TransfertController {
 
     //CRUD
     //Ajouter un transfert via console-agent &back-office & wallet
-    //en espèces
+    //en espèce
     @PostMapping("/agent/especes")
     public ResponseEntity<?> save(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
