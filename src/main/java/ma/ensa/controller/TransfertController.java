@@ -3,6 +3,8 @@ package ma.ensa.controller;
 import lombok.Data;
 import ma.ensa.agent.AgentDTO;
 import ma.ensa.agent.AgentFeign;
+import ma.ensa.back_office.ParametreDTO;
+import ma.ensa.back_office.ParametreFeign;
 import ma.ensa.beneficiaire.BeneficiaireDTO;
 import ma.ensa.beneficiaire.BeneficiaireFeign;
 import ma.ensa.client.ClientDTO;
@@ -39,6 +41,8 @@ public class TransfertController {
     private final ClientFeign clientFeign;
     private final ClientBanqueFeign clientBanqueFeign;
     private final CompteBancaireFeign compteBancaireFeign;
+    private final ParametreFeign parametreFeign;
+
 
 
     //CRUD
@@ -51,10 +55,15 @@ public class TransfertController {
         CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
         //--> Id de l'agent courant à idEmetteur
         transfertDTO.setIdEmetteur(currentAgentDTO.getTheId());
+        //gestion de la commission
+        ParametreDTO parametreDTO = parametreFeign.findAll().get(0);
+        double pourcentageCommission = parametreDTO.getCommision();
+        double commission = transfertDTO.getMontant()*pourcentageCommission;
+        transfertDTO.setCommission(commission);
         //On met à jour le solde
         AgentDTO agentDTO = agentFeign.getAgentById(currentAgentDTO.getTheId());
         //On met à jour le solde de l'agent
-        agentDTO.setSolde(agentDTO.getSolde()+transfertDTO.getMontant());
+        agentDTO.setSolde(agentDTO.getSolde()+transfertDTO.getMontant()+commission);
         agentFeign.update(agentDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -66,14 +75,22 @@ public class TransfertController {
     public ResponseEntity<?> saveViaCmi(@RequestBody TransfertDTO transfertDTO) throws Exception {
         if (transfertDTO == null)
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
-        //VERIFIER SI LE CLIENT DISPOSE ASSEZ DE SOLDE DANS SON COMPTE BANCAIRE POUR LE TRANSFERT
-        CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
-        //--> Id de l'agent courant à idEmetteur
-        transfertDTO.setIdEmetteur(currentAgentDTO.getTheId());
-        //
         ClientBanqueDTO clientBanqueDTO = clientBanqueFeign.getClientBanqueById(transfertDTO.getIdClient());
         CompteBancaireDTO compteBancaireDTO = compteBancaireFeign.getCompteBancaireById(clientBanqueDTO.getIdCompteBancaire());
-        compteBancaireDTO.setSolde(compteBancaireDTO.getSolde()-transfertDTO.getMontant());
+        CurrentAgentDTO currentAgentDTO = agentFeign.getCurrentAgent();
+        //VERIFIER SI LE CLIENT DISPOSE ASSEZ DE SOLDE DANS SON COMPTE BANCAIRE POUR LE TRANSFERT
+        if (compteBancaireDTO.getSolde()<transfertDTO.getMontant()){
+            return ResponseEntity.badRequest().body("The client has not enough money");
+        }
+        //--> Id de l'agent courant à idEmetteur
+        transfertDTO.setIdEmetteur(currentAgentDTO.getTheId());
+        //gestion de la commission
+        ParametreDTO parametreDTO = parametreFeign.findAll().get(0);
+        double pourcentageCommission = parametreDTO.getCommision();
+        double commission = transfertDTO.getMontant()*pourcentageCommission;
+        transfertDTO.setCommission(commission);
+        //
+        compteBancaireDTO.setSolde(compteBancaireDTO.getSolde()-transfertDTO.getMontant()-commission);
         compteBancaireFeign.update(compteBancaireDTO);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
