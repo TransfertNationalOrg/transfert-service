@@ -9,6 +9,8 @@ import ma.ensa.beneficiaire.BeneficiaireDTO;
 import ma.ensa.beneficiaire.BeneficiaireFeign;
 import ma.ensa.client.ClientDTO;
 import ma.ensa.client.ClientFeign;
+import ma.ensa.client.CompteDTO;
+import ma.ensa.client.CompteFeign;
 import ma.ensa.cmi.ClientBanqueDTO;
 import ma.ensa.cmi.ClientBanqueFeign;
 import ma.ensa.cmi.CompteBancaireDTO;
@@ -42,6 +44,7 @@ public class TransfertController {
     private final ClientBanqueFeign clientBanqueFeign;
     private final CompteBancaireFeign compteBancaireFeign;
     private final ParametreFeign parametreFeign;
+    private final CompteFeign compteFeign;
 
 
 
@@ -104,10 +107,19 @@ public class TransfertController {
             return ResponseEntity.badRequest().body("The provided transfert is not valid");
         CurrentClientDTO currentClientDTO = clientFeign.getCurrentCllient();
         //VERIFIER SI LE CLIENT DISPOSE ASSEZ DE SOLDE POUR LE TRANSFERT
+        CompteDTO compteDTO = compteFeign.getCompteById(currentClientDTO.getTheId());
+        if (compteDTO.getSolde()<transfertDTO.getMontant()){
+            return ResponseEntity.badRequest().body("The client has not enough money");
+        }
         transfertDTO.setIdEmetteur(currentClientDTO.getTheId());
+        //gestion de commission
+        ParametreDTO parametreDTO = parametreFeign.findAll().get(0);
+        double pourcentageCommission = parametreDTO.getCommision();
+        double commission = transfertDTO.getMontant()*pourcentageCommission;
+        transfertDTO.setCommission(commission);
         //On met à jour le solde
         ClientDTO clientDTO = clientFeign.getClientById(currentClientDTO.getTheId());
-        clientDTO.setSolde(clientDTO.getSolde()-transfertDTO.getMontant());
+        clientDTO.setSolde(clientDTO.getSolde()-transfertDTO.getMontant()-commission);
         clientFeign.update(clientDTO);
         //Bénéficiaire est client
         ClientDTO clientBeneficiaireDTO = clientFeign.getClientById(transfertDTO.getIdBeneficiaire());
@@ -117,7 +129,6 @@ public class TransfertController {
                 .status(HttpStatus.CREATED)
                 .body(transfertConverter.convertToDTO(transfertService.save(transfertConverter.convertToDM(transfertDTO))));
     }
-    //Gerer les commissions
 
     @PutMapping("/")
     public ResponseEntity<?> update(@RequestBody TransfertDTO transfertDTO) throws Exception {
