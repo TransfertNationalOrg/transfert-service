@@ -19,7 +19,7 @@ public interface ClientFeign {
     @GetMapping("client/{id}")
     ClientDTO getClientById(@PathVariable("id") Long id);
 
-    //Update an client
+    //Update a client
     @PutMapping("client/")
     ClientDTO update(@RequestBody ClientDTO clientDTO);
 
